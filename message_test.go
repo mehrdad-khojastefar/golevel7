@@ -1,10 +1,12 @@
 package golevel7
 
 import (
-	"golang.org/x/net/html/charset"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"testing"
+
+	"golang.org/x/net/html/charset"
 )
 
 func readFile(fname string) ([]byte, error) {
@@ -34,7 +36,7 @@ func TestMessage(t *testing.T) {
 	}
 
 	msg := &Message{Value: []rune(string(data))}
-	msg.parse()
+	err = msg.parse()
 	if err != nil {
 		t.Error(err)
 	}
@@ -80,6 +82,7 @@ func TestMessage(t *testing.T) {
 	if len(msg.Segments) != 9 {
 		t.Errorf("Expected 9 segments got %d\n", len(msg.Segments))
 	}
+
 }
 
 func TestMsgUnmarshal(t *testing.T) {
@@ -103,4 +106,24 @@ func TestMsgUnmarshal(t *testing.T) {
 	if st.LastName != "Jones" {
 		t.Errorf("Expected Jones got %s\n", st.LastName)
 	}
+}
+
+func TestMyCode(t *testing.T) {
+	file, err := os.Open("./testdata/msg.hl7")
+	if err != nil {
+		t.Fatal(err)
+	}
+	decoder := NewDecoder(file)
+	msgs, err := decoder.Messages()
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(len(msgs))
+	fmt.Println(len(msgs[0].Segments))
+	inf, err := msgs[0].Info()
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(inf)
+
 }
