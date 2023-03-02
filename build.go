@@ -64,7 +64,10 @@ func StartMessage(info MsgInfo) (*Message, error) {
 	if info.VersionID == "" {
 		info.VersionID = "2.4"
 	}
-	msg := NewMessage([]byte{})
+	msg, err := NewMessage([]byte{})
+	if err != nil {
+		return nil, err
+	}
 	Marshal(msg, &info)
 	return msg, nil
 }

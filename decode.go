@@ -53,6 +53,7 @@ func readBuf(reader io.Reader) ([]byte, error) {
 }
 
 // Split will split a set of HL7 messages
+//
 //	\x0b MESSAGE \x1c\x0d
 func Split(buf []byte) [][]byte {
 	msgSep := []byte{'\x1c', '\x0d'}
@@ -77,8 +78,8 @@ func (d *Decoder) Messages() ([]*Message, error) {
 	bufs := Split(buf)
 	z := []*Message{}
 	for _, buf := range bufs {
-		msg := NewMessage(buf)
-		if err := msg.parse(); err != nil {
+		msg, err := NewMessage(buf)
+		if err != nil {
 			return nil, err
 		}
 		z = append(z, msg)

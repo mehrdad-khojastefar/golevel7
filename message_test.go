@@ -113,7 +113,10 @@ func TestMyCode(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	msg := NewMessage(file)
+	msg, err := NewMessage(file)
+	if err != nil {
+		t.Fatal(err)
+	}
 	msg.parse()
 	fmt.Println(msg.String())
 

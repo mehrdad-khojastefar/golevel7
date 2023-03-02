@@ -25,6 +25,7 @@ func NewMessageScanner(r io.Reader) *MessageScanner {
 }
 
 func (ms *MessageScanner) Scan() (gotOne bool) {
+	var err error
 	if scan := ms.b.Scan(); scan {
 		if ms.err = ms.b.Err(); ms.err != nil || len(ms.b.Bytes()) < 5 {
 			if ms.b.Bytes() != nil && !(len(ms.b.Bytes()) < 5) {
@@ -34,7 +35,10 @@ func (ms *MessageScanner) Scan() (gotOne bool) {
 			gotOne = true
 		}
 		if gotOne {
-			ms.thisMsg = NewMessage(ms.b.Bytes())
+			ms.thisMsg, err = NewMessage(ms.b.Bytes())
+			if err != nil {
+				return false
+			}
 		} else {
 			ms.thisMsg = nil
 		}
