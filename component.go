@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-//Component is an HL7 component
+// Component is an HL7 component
 type Component struct {
 	SubComponents []SubComponent
 	Value         []rune
@@ -14,7 +14,9 @@ type Component struct {
 func (c *Component) String() string {
 	var str string
 	for _, s := range c.SubComponents {
-		str += "Component SubComponent: " + string(s.Value) + "\n"
+		if string(s.Value) != "" && string(s.Value) != " " && string(s.Value) != "\"\"" {
+			str += "Component SubComponent: " + string(s.Value) + "\n"
+		}
 	}
 	return str
 }

@@ -109,21 +109,12 @@ func TestMsgUnmarshal(t *testing.T) {
 }
 
 func TestMyCode(t *testing.T) {
-	file, err := os.Open("./testdata/msg.hl7")
+	file, err := ioutil.ReadFile("./testdata/my-test.hl7")
 	if err != nil {
 		t.Fatal(err)
 	}
-	decoder := NewDecoder(file)
-	msgs, err := decoder.Messages()
-	if err != nil {
-		t.Fatal(err)
-	}
-	fmt.Println(len(msgs))
-	fmt.Println(len(msgs[0].Segments))
-	inf, err := msgs[0].Info()
-	if err != nil {
-		t.Fatal(err)
-	}
-	fmt.Println(inf)
+	msg := NewMessage(file)
+	msg.parse()
+	fmt.Println(msg.String())
 
 }

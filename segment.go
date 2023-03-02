@@ -17,13 +17,17 @@ func (s *Segment) String() string {
 	var str string
 	for i, f := range s.Fields {
 		value := string(f.Value)
-		if i == 0 {
-			str += fmt.Sprintf("Segment: %v\n", f.String())
+		if string(f.Value) == "" || string(f.Value) == " " {
+			continue
 		} else {
-			if value != "" {
-				str += fmt.Sprintf("\t%d: %s\n", f.SeqNum, f.String())
+			if i == 0 {
+				str += fmt.Sprintf("Segment: %v\n", f.String())
+			} else {
+				if value != "" {
+					str += fmt.Sprintf("\t%d: %s\n", f.SeqNum, f.String())
+				}
+				// str += f.String()
 			}
-			// str += f.String()
 		}
 	}
 	return str
