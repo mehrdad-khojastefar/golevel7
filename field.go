@@ -33,7 +33,7 @@ func (f *Field) String() string {
 	}
 	if f.SeqNum == 0 {
 		name := "Unknown"
-		if f.SeqNum < len(f.SegName) {
+		if f.SeqNum < len(commons.FieldNames[f.SegName]) {
 			name = commons.FieldNames[f.SegName][f.SeqNum]
 		}
 		return fmt.Sprintf("\t%v", name)
