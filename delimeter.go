@@ -2,7 +2,7 @@ package golevel7
 
 const eof = rune(0)
 const endMsg = '\x0A'
-const segTerm = '\x0D'
+const SegTerm = '\x0D'
 
 // Delimeters holds the list of hl7 message delimeters
 type Delimeters struct {
