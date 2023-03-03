@@ -32,7 +32,11 @@ func (f *Field) String() string {
 		}
 	}
 	if f.SeqNum == 0 {
-		return fmt.Sprintf("\t%v", commons.FieldNames[f.SegName][f.SeqNum])
+		name := "Unknown"
+		if f.SeqNum < len(f.SegName) {
+			name = commons.FieldNames[f.SegName][f.SeqNum]
+		}
+		return fmt.Sprintf("\t%v", name)
 	}
 	if len(commons.FieldNames[f.SegName]) < f.SeqNum {
 		return fmt.Sprintf("\tUnknown: %v components: %v", string(f.Value), componentsStr)
