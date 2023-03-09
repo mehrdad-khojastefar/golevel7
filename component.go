@@ -15,7 +15,7 @@ func (c *Component) String() string {
 	var str string
 	for _, s := range c.SubComponents {
 		if string(s.Value) != "" && string(s.Value) != " " && string(s.Value) != "\"\"" {
-			str += "Component SubComponent: " + string(s.Value) + "\n"
+			str += " " + string(s.Value)
 		}
 	}
 	return str
