@@ -25,23 +25,23 @@ func (f *Field) String() string {
 	// 	str += "Field Component: " + string(c.Value) + "\n"
 	// 	str += c.String()
 	// }
-	componentsStr := ""
-	for i, c := range f.Components {
-		if c.String() != "" {
-			componentsStr += fmt.Sprintf("\tcomponent#%v: %v", i, c.String())
-		}
-	}
+	// componentsStr := ""
+	// for i, c := range f.Components {
+	// 	if c.String() != "" {
+	// 		componentsStr += fmt.Sprintf("\tcomponent#%v: %v", i, c.String())
+	// 	}
+	// }
 	if f.SeqNum == 0 {
 		name := "Unknown"
 		if f.SeqNum < len(commons.FieldNames[f.SegName]) {
 			name = commons.FieldNames[f.SegName][f.SeqNum]
 		}
-		return fmt.Sprintf("\t%v", name)
+		return fmt.Sprintf("%v", name)
 	}
 	if len(commons.FieldNames[f.SegName]) < f.SeqNum {
-		return fmt.Sprintf("\tUnknown: %v components: %v", string(f.Value), componentsStr)
+		return fmt.Sprintf("Unknown: %v", string(f.Value))
 	}
-	return fmt.Sprintf("\t%v: %v components: %v", commons.FieldNames[f.SegName][f.SeqNum], string(f.Value), componentsStr)
+	return fmt.Sprintf("%v: %v", commons.FieldNames[f.SegName][f.SeqNum], string(f.Value))
 }
 
 func (f *Field) parse(seps *Delimeters) error {
