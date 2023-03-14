@@ -13,7 +13,7 @@ import (
 
 // Message is an HL7 message
 type Message struct {
-	Segments   []Segment
+	Segments   []*Segment
 	Value      []rune
 	Delimeters Delimeters
 }
@@ -69,7 +69,7 @@ func (m *Message) Segment(s string) (*Segment, error) {
 			continue
 		}
 		if string(fld.Value) == s {
-			return &m.Segments[i], nil
+			return m.Segments[i], nil
 		}
 	}
 	return nil, fmt.Errorf("Segment not found")
@@ -84,7 +84,7 @@ func (m *Message) AllSegments(s string) ([]*Segment, error) {
 			continue
 		}
 		if string(fld.Value) == s {
-			segs = append(segs, &m.Segments[i])
+			segs = append(segs, m.Segments[i])
 		}
 	}
 	if len(segs) == 0 {
@@ -150,7 +150,7 @@ func (m *Message) Set(l *Location, val string) error {
 		s := Segment{}
 		s.forceField([]rune(l.Segment), 0)
 		s.Set(l, val, &m.Delimeters)
-		m.Segments = append(m.Segments, s)
+		m.Segments = append(m.Segments, &s)
 	} else {
 		seg.Set(l, val, &m.Delimeters)
 	}
@@ -180,13 +180,13 @@ func (m *Message) parse() error {
 			if len(v) > 4 { // seg name + field sep
 				seg := Segment{Value: v}
 				seg.parse(&m.Delimeters)
-				m.Segments = append(m.Segments, seg)
+				m.Segments = append(m.Segments, &seg)
 			}
 			return nil
 		case ch == SegTerm:
 			seg := Segment{Value: m.Value[i : ii-1]}
 			seg.parse(&m.Delimeters)
-			m.Segments = append(m.Segments, seg)
+			m.Segments = append(m.Segments, &seg)
 			i = ii
 		case ch == m.Delimeters.Escape:
 			ii++

@@ -11,7 +11,7 @@ import (
 type Field struct {
 	SegName    string
 	SeqNum     int
-	Components []Component
+	Components []*Component
 	Value      []rune
 }
 
@@ -67,13 +67,13 @@ func (f *Field) parse(seps *Delimeters) error {
 			if ii > i {
 				cmp := Component{Value: f.Value[i : ii-1]}
 				cmp.parse(seps)
-				f.Components = append(f.Components, cmp)
+				f.Components = append(f.Components, &cmp)
 			}
 			return nil
 		case ch == seps.Component:
 			cmp := Component{Value: f.Value[i : ii-1]}
 			cmp.parse(seps)
-			f.Components = append(f.Components, cmp)
+			f.Components = append(f.Components, &cmp)
 			i = ii
 		case ch == seps.Escape:
 			ii++
@@ -95,7 +95,7 @@ func (f *Field) Component(i int) (*Component, error) {
 	if i > len(f.Components) || i < 1 {
 		return nil, fmt.Errorf("Component out of range")
 	}
-	return &f.Components[i-1], nil
+	return f.Components[i-1], nil
 }
 
 // Get returns the value specified by the Location
@@ -117,7 +117,7 @@ func (f *Field) Set(l *Location, val string, seps *Delimeters) error {
 		loc = 0
 	}
 	if x := loc - len(f.Components) + 1; x > 0 {
-		f.Components = append(f.Components, make([]Component, x)...)
+		f.Components = append(f.Components, make([]*Component, x)...)
 	}
 	err := f.Components[loc].Set(l, val, seps)
 	if err != nil {

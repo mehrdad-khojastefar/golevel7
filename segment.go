@@ -8,7 +8,7 @@ import (
 
 // Segment is an HL7 segment
 type Segment struct {
-	Fields []Field
+	Fields []*Field
 	Value  []rune
 	maxSeq int
 }
@@ -83,7 +83,7 @@ func (s *Segment) parse(seps *Delimeters) error {
 			if ii > i {
 				fld := Field{Value: s.Value[i : ii-1], SeqNum: seq, SegName: segName}
 				fld.parse(seps)
-				s.Fields = append(s.Fields, fld)
+				s.Fields = append(s.Fields, &fld)
 			}
 			return nil
 		case isMSH && seq == 2 && ch == seps.Repetition:
@@ -97,7 +97,7 @@ func (s *Segment) parse(seps *Delimeters) error {
 			} else {
 				fld := Field{Value: s.Value[i : ii-1], SeqNum: seq, SegName: segName}
 				fld.parse(seps)
-				s.Fields = append(s.Fields, fld)
+				s.Fields = append(s.Fields, &fld)
 			}
 			i = ii
 			seq++
@@ -109,7 +109,7 @@ func (s *Segment) parse(seps *Delimeters) error {
 		case ch == seps.Repetition:
 			fld := Field{Value: s.Value[i : ii-1], SeqNum: seq, SegName: segName}
 			fld.parse(seps)
-			s.Fields = append(s.Fields, fld)
+			s.Fields = append(s.Fields, &fld)
 			i = ii
 		case ch == seps.Escape:
 			ii++
@@ -127,9 +127,9 @@ func (s *Segment) forceField(val []rune, seq int) {
 	}
 	fld := Field{Value: val, SeqNum: seq, SegName: "MSH"}
 	cmp := Component{Value: val}
-	cmp.SubComponents = append(cmp.SubComponents, SubComponent{Value: val})
-	fld.Components = append(fld.Components, cmp)
-	s.Fields = append(s.Fields, fld)
+	cmp.SubComponents = append(cmp.SubComponents, &SubComponent{Value: val})
+	fld.Components = append(fld.Components, &cmp)
+	s.Fields = append(s.Fields, &fld)
 }
 
 func (s *Segment) encode(seps *Delimeters) []rune {
@@ -150,7 +150,7 @@ func (s *Segment) encode(seps *Delimeters) []rune {
 func (s *Segment) Field(i int) (*Field, error) {
 	for idx, fld := range s.Fields {
 		if fld.SeqNum == i {
-			return &s.Fields[idx], nil
+			return s.Fields[idx], nil
 		}
 	}
 	return nil, fmt.Errorf("Field not found")
@@ -161,7 +161,7 @@ func (s *Segment) AllFields(i int) ([]*Field, error) {
 	flds := []*Field{}
 	for idx, fld := range s.Fields {
 		if fld.SeqNum == i {
-			flds = append(flds, &s.Fields[idx])
+			flds = append(flds, s.Fields[idx])
 		}
 	}
 	if len(flds) == 0 {

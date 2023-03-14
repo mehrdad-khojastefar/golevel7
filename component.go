@@ -7,7 +7,7 @@ import (
 
 // Component is an HL7 component
 type Component struct {
-	SubComponents []SubComponent
+	SubComponents []*SubComponent
 	Value         []rune
 }
 
@@ -42,12 +42,12 @@ func (c *Component) parse(seps *Delimeters) error {
 		case ch == eof || (ch == endMsg && seps.LFTermMsg):
 			if ii > i {
 				scmp := SubComponent{Value: c.Value[i : ii-1]}
-				c.SubComponents = append(c.SubComponents, scmp)
+				c.SubComponents = append(c.SubComponents, &scmp)
 			}
 			return nil
 		case ch == seps.SubComponent:
 			scmp := SubComponent{Value: c.Value[i : ii-1]}
-			c.SubComponents = append(c.SubComponents, scmp)
+			c.SubComponents = append(c.SubComponents, &scmp)
 			i = ii
 		case ch == seps.Escape:
 			ii++
@@ -61,7 +61,7 @@ func (c *Component) SubComponent(i int) (*SubComponent, error) {
 	if i > len(c.SubComponents) || i < 1 {
 		return nil, fmt.Errorf("SubComponent out of range")
 	}
-	return &c.SubComponents[i-1], nil
+	return c.SubComponents[i-1], nil
 }
 
 func (c *Component) encode(seps *Delimeters) []rune {
@@ -91,7 +91,7 @@ func (c *Component) Set(l *Location, val string, seps *Delimeters) error {
 		subloc = 0
 	}
 	if x := subloc - len(c.SubComponents) + 1; x > 0 {
-		c.SubComponents = append(c.SubComponents, make([]SubComponent, x)...)
+		c.SubComponents = append(c.SubComponents, make([]*SubComponent, x)...)
 	}
 	c.SubComponents[subloc].Value = []rune(val)
 	c.Value = c.encode(seps)
