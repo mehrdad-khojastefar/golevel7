@@ -11,6 +11,16 @@ type Component struct {
 	Value         []rune
 }
 
+func (c *Component) GetValue() string {
+	for i, sc := range c.SubComponents {
+		c.Value = append(c.Value, sc.Value...)
+		if i != len(c.SubComponents)-1 {
+			c.Value = append(c.Value, []rune("&")...)
+		}
+	}
+	return string(c.Value)
+}
+
 func (c *Component) String() string {
 	var str string
 	for _, s := range c.SubComponents {

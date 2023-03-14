@@ -15,6 +15,17 @@ type Field struct {
 	Value      []rune
 }
 
+func (f *Field) GetValue() string {
+	for i, c := range f.Components {
+		c.GetValue()
+		f.Value = append(f.Value, c.Value...)
+		if i != len(f.Components)-1 {
+			c.Value = append(c.Value, []rune("^")...)
+		}
+	}
+	return string(f.Value)
+}
+
 func (f *Field) NumSubFields() int {
 	return len(f.Components)
 }

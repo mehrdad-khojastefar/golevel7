@@ -13,6 +13,18 @@ type Segment struct {
 	maxSeq int
 }
 
+func (s *Segment) GetValue() string {
+	for i, f := range s.Fields {
+		f.GetValue()
+		f.Value = append(s.Value, f.Value...)
+		if i != len(s.Fields)-1 {
+			s.Value = append(s.Value, []rune("|")...)
+		}
+	}
+	s.Value = append(s.Value, []rune("\n")...)
+	return string(s.Value)
+}
+
 func (s *Segment) String() string {
 	var str string
 	for i, f := range s.Fields {

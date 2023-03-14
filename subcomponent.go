@@ -4,3 +4,7 @@ package golevel7
 type SubComponent struct {
 	Value []rune
 }
+
+func (sc *SubComponent) GetValue() string {
+	return string(sc.Value)
+}
