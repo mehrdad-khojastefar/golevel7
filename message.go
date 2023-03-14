@@ -23,7 +23,7 @@ func (m *Message) GetValue() string {
 		s.GetValue()
 		m.Value = append(m.Value, s.Value...)
 		if i != len(m.Segments)-1 {
-			m.Value = append(m.Value, SegTerm)
+			m.Value = append(m.Value, '\n')
 		}
 	}
 	return string(m.Value)
