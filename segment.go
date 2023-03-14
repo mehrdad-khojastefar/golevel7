@@ -21,7 +21,6 @@ func (s *Segment) GetValue() string {
 			s.Value = append(s.Value, []rune("|")...)
 		}
 	}
-	s.Value = append(s.Value, []rune("\n")...)
 	return string(s.Value)
 }
 

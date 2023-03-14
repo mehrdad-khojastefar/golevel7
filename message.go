@@ -18,6 +18,17 @@ type Message struct {
 	Delimeters Delimeters
 }
 
+func (m *Message) GetValue() string {
+	for i, s := range m.Segments {
+		s.GetValue()
+		m.Value = append(m.Value, s.Value...)
+		if i != len(m.Segments)-1 {
+			m.Value = append(m.Value, SegTerm)
+		}
+	}
+	return string(m.Value)
+}
+
 // NewMessage returns a new message with the v byte value
 func NewMessage(v []byte) (*Message, error) {
 	var utf8V []byte
