@@ -26,7 +26,9 @@ func (m *Message) GetValue() string {
 			m.Value = append(m.Value, '\n')
 		}
 	}
-	return strings.ReplaceAll(string(m.Value), " ", "")
+	trimmedVal := strings.ReplaceAll(string(m.Value), " ", "")
+	m.Value = []rune(trimmedVal)
+	return trimmedVal
 }
 
 // NewMessage returns a new message with the v byte value
