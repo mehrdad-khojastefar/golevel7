@@ -20,7 +20,7 @@ func (f *Field) GetValue() string {
 		c.GetValue()
 		f.Value = append(f.Value, c.Value...)
 		if i != len(f.Components)-1 {
-			f.Value = append(c.Value, []rune("^")...)
+			f.Value = append(f.Value, []rune("^")...)
 		}
 	}
 	return string(f.Value)
