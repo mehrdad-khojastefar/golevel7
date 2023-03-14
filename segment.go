@@ -16,7 +16,7 @@ type Segment struct {
 func (s *Segment) GetValue() string {
 	for i, f := range s.Fields {
 		f.GetValue()
-		f.Value = append(s.Value, f.Value...)
+		s.Value = append(s.Value, f.Value...)
 		if i != len(s.Fields)-1 {
 			s.Value = append(s.Value, []rune("|")...)
 		}
