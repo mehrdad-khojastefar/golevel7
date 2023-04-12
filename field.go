@@ -49,7 +49,7 @@ func (f *Field) String() string {
 		}
 		return fmt.Sprintf("%v", name)
 	}
-	if len(commons.FieldNames[f.SegName]) < f.SeqNum {
+	if len(commons.FieldNames[f.SegName]) <= f.SeqNum {
 		return fmt.Sprintf("Unknown: %v", string(f.Value))
 	}
 	return fmt.Sprintf("%v: %v", commons.FieldNames[f.SegName][f.SeqNum], string(f.Value))
